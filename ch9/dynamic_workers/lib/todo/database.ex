@@ -3,6 +3,7 @@ defmodule Todo.Database do
   @db_folder "./persist"
 
   def start_link do
+    IO.puts("Starting database server.")
     File.mkdir_p!(@db_folder)
 
     children = Enum.map(1..@pool_size, &worker_spec/1)
@@ -25,12 +26,6 @@ defmodule Todo.Database do
     :erlang.phash2(key, @pool_size) + 1
   end
 
-  def init(_) do
-    IO.puts("Starting database server.")
-    File.mkdir_p!(@db_folder)
-    {:ok, start_workers()}
-  end
-
   def handle_call({:choose_worker, key}, _, workers) do
     worker_key = :erlang.phash2(key, 3)
     {:reply, Map.get(workers, worker_key), workers}
@@ -42,13 +37,6 @@ defmodule Todo.Database do
       start: {__MODULE__, :start_link, []},
       type: :supervisor
     }
-  end
-
-  defp start_workers() do
-    for index <- 1..3, into: %{} do
-      {:ok, pid} = Todo.DatabaseWorker.start_link(@db_folder)
-      {index - 1, pid}
-    end
   end
 
   defp worker_spec(worker_id) do
