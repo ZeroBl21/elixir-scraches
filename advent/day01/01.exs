@@ -3,37 +3,23 @@ defmodule Day1 do
     "./input.txt"
     |> File.stream!()
     |> Stream.map(&String.trim/1)
-    |> Stream.map(&fuel_required(&1))
+    |> Stream.map(&String.to_integer/1)
+    |> Stream.map(&total_fuel_per_module/1)
     |> Enum.sum()
     |> IO.inspect(label: "Total Fuel")
   end
 
-  defp fuel_required(fuel) when is_binary(fuel) do
-    fuel
-    |> String.to_integer()
-    |> calculate_total_fuel()
-  end
+  defp total_fuel_per_module(mass), do: fuel_for_mass(mass, 0)
 
-  defp fuel_required(fuel) do
-    fuel
-    |> Integer.floor_div(3)
-    |> Kernel.-(2)
-  end
+  defp fuel_for_mass(mass, acc) when mass <= 0, do: acc
 
-  defp calculate_total_fuel(mass) do
-    calculate_fuel(mass, 0)
-  end
+  defp fuel_for_mass(mass, acc) do
+    fuel =
+      mass
+      |> Integer.floor_div(3)
+      |> Kernel.-(2)
 
-  defp calculate_fuel(fuel, acc) when fuel <= 0, do: acc
-
-  defp calculate_fuel(mass, total) do
-    fuel = fuel_required(mass)
-
-    if fuel > 0 do
-      calculate_fuel(fuel, total + fuel)
-    else
-      total
-    end
+    fuel_for_mass(max(fuel, 0), acc + max(fuel, 0))
   end
 end
 
