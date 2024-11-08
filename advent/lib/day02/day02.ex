@@ -1,5 +1,5 @@
 defmodule Day02 do
-  @input "./day02-input.txt"
+  @input "./lib/day02/day02-input.txt"
 
   def part1(noun \\ 12, verb \\ 2) do
     @input
@@ -10,21 +10,37 @@ defmodule Day02 do
   end
 
   def part2() do
-    do_part2()
-    |> IO.puts()
+    do_part2_stream()
+    |> IO.inspect(label: "Part 2")
   end
 
-  def do_part2() do
-    for(
-      noun <- 0..99,
-      verb <- 0..99,
-      part1(noun, verb) == 19_690_720,
-      do: 100 * noun + verb
-    )
-    |> hd()
+  def part2_stream() do
+    do_part2_stream()
+    |> IO.inspect(label: "Part 2")
   end
 
-  def run(input, pos) do
+  # defp do_part2() do
+  #   for(
+  #     noun <- 0..99,
+  #     verb <- 0..99,
+  #     part1(noun, verb) == 19_690_720,
+  #     do: 100 * noun + verb
+  #   )
+  #   |> hd()
+  # end
+
+  defp do_part2_stream do
+    0..99
+    |> Stream.flat_map(fn noun ->
+      0..99
+      |> Stream.map(fn verb -> {noun, verb} end)
+    end)
+    |> Stream.filter(fn {noun, verb} -> part1(noun, verb) == 19_690_720 end)
+    |> Stream.map(fn {noun, verb} -> 100 * noun + verb end)
+    |> Enum.at(0)
+  end
+
+  defp run(input, pos) do
     case Enum.fetch(input, pos) do
       {:ok, 99} ->
         input
@@ -75,5 +91,8 @@ defmodule Day02 do
   end
 end
 
-# Day02.part1()
-Day02.part2()
+Day02.part1()
+|> IO.inspect(label: "Part 1")
+
+# Day02.part2()
+Day02.part2_stream()
