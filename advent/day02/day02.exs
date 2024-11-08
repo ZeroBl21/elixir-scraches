@@ -1,28 +1,41 @@
 defmodule Day02 do
   @input "./day02-input.txt"
-  # @input "./test.txt"
 
-  def part1() do
+  def part1(noun \\ 12, verb \\ 2) do
     @input
     |> get_input()
-    |> replace_part1()
+    |> change_input(noun, verb)
     |> run(0)
+    |> hd()
+  end
+
+  def part2() do
+    do_part2()
     |> IO.puts()
+  end
+
+  def do_part2() do
+    for(
+      noun <- 0..99,
+      verb <- 0..99,
+      part1(noun, verb) == 19_690_720,
+      do: 100 * noun + verb
+    )
+    |> hd()
   end
 
   def run(input, pos) do
     case Enum.fetch(input, pos) do
       {:ok, 99} ->
-        IO.inspect(input, label: "El Array Final")
-        Enum.at(input, 0)
+        input
 
       {:ok, 1} ->
-        new_input = instruction(:sum, input, pos)
-        run(new_input, pos + 4)
+        instruction(:sum, input, pos)
+        |> run(pos + 4)
 
       {:ok, 2} ->
-        new_input = instruction(:mul, input, pos)
-        run(new_input, pos + 4)
+        instruction(:mul, input, pos)
+        |> run(pos + 4)
 
       _ ->
         IO.puts("Unknown opcode or error")
@@ -55,11 +68,12 @@ defmodule Day02 do
     |> Enum.map(&String.to_integer/1)
   end
 
-  defp replace_part1(input) do
+  defp change_input(input, noun, verb) do
     input
-    |> List.replace_at(1, 12)
-    |> List.replace_at(2, 2)
+    |> List.replace_at(1, noun)
+    |> List.replace_at(2, verb)
   end
 end
 
-Day02.part1()
+# Day02.part1()
+Day02.part2()
