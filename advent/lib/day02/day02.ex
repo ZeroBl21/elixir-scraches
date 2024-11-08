@@ -10,24 +10,24 @@ defmodule Day02 do
   end
 
   def part2() do
-    do_part2_stream()
+    do_part2()
     |> IO.inspect(label: "Part 2")
   end
 
   def part2_stream() do
     do_part2_stream()
-    |> IO.inspect(label: "Part 2")
+    |> IO.inspect(label: "Part 2 Stream")
   end
 
-  # defp do_part2() do
-  #   for(
-  #     noun <- 0..99,
-  #     verb <- 0..99,
-  #     part1(noun, verb) == 19_690_720,
-  #     do: 100 * noun + verb
-  #   )
-  #   |> hd()
-  # end
+  defp do_part2() do
+    for(
+      noun <- 0..99,
+      verb <- 0..99,
+      part1(noun, verb) == 19_690_720,
+      do: 100 * noun + verb
+    )
+    |> hd()
+  end
 
   defp do_part2_stream do
     0..99
@@ -91,8 +91,8 @@ defmodule Day02 do
   end
 end
 
-Day02.part1()
-|> IO.inspect(label: "Part 1")
+# Day02.part1()
+# |> IO.inspect(label: "Part 1")
 
 # Day02.part2()
-Day02.part2_stream()
+# Day02.part2_stream()
