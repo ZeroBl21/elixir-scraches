@@ -11,12 +11,10 @@ defmodule Day02 do
 
   def part2() do
     do_part2()
-    |> IO.inspect(label: "Part 2")
   end
 
   def part2_stream() do
     do_part2_stream()
-    |> IO.inspect(label: "Part 2 Stream")
   end
 
   defp do_part2() do
@@ -95,4 +93,7 @@ end
 # |> IO.inspect(label: "Part 1")
 
 # Day02.part2()
+# |> IO.inspect(label: "Part 2")
+
 # Day02.part2_stream()
+# |> IO.inspect(label: "Part 2 Stream")
