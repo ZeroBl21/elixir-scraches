@@ -3,7 +3,10 @@
 
 # Random Elixir Experiments
 
-This repository contains random experiments and tests in Elixir, based on concepts from the book _"Elixir in Action"_.
+This repository contains random experiments and tests in Elixir, based on:
+
+- _"Elixir in Action"_.
+- _"Advent of Code 2019"_.
 
 ## Purpose
 
