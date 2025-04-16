@@ -1,6 +1,4 @@
 defmodule Jobber.Application do
-  # See https://hexdocs.pm/elixir/Application.html
-  # for more information on OTP Applications
   @moduledoc false
 
   use Application
@@ -14,6 +12,7 @@ defmodule Jobber.Application do
     ]
 
     children = [
+      {Registry, keys: :unique, name: Jobber.JobRegistry},
       {DynamicSupervisor, job_runner_config}
     ]
 
