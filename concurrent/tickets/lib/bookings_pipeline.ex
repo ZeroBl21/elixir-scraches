@@ -22,10 +22,14 @@ defmodule BookingsPipeline do
   def handle_message(_processor, message, _context) do
     %{data: %{event: event, user: user}} = message
 
-    Tickets.create_ticket(user, event)
-    Tickets.send_email(user)
+    if Tickets.tickets_available?(event) do
+      Tickets.create_ticket(user, event)
+      Tickets.send_email(user)
 
-    IO.inspect(message, "label: message")
+      IO.inspect(message, "label: message")
+    else
+      Broadway.Message.failed(message, "bookings-closed")
+    end
   end
 
   def prepare_messages(messages, _context) do
@@ -44,6 +48,18 @@ defmodule BookingsPipeline do
         user = Enum.find(users, &(&1.id == data.user_id))
         Map.put(data, :user, user)
       end)
+    end)
+  end
+
+  def handle_failed(messages, _context) do
+    IO.inspect(messages, label: "Failed messages")
+
+    Enum.map(messages, fn
+      %{status: {:failed, "bookings-closed"}} = msg ->
+        Broadway.Message.configure_ack(msg, on_failure: :reject)
+
+      msg ->
+        msg
     end)
   end
 
