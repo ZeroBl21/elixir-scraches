@@ -20,4 +20,10 @@ defmodule Tickets do
   def users_by_ids(ids) when is_list(ids) do
     Enum.filter(@users, &(&1.id in ids))
   end
+
+  def insert_all_tickets(messages) do
+    Process.sleep(Enum.count(messages) * 250)
+
+    messages
+  end
 end
