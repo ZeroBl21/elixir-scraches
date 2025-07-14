@@ -152,7 +152,7 @@ defmodule Mastery.Core.Quiz do
     Map.put(
       quiz,
       :used,
-      Map.delete(quiz.used, question.template.name)
+      List.delete(quiz.used, question.template)
     )
   end
 
