@@ -7,9 +7,10 @@ defmodule Mastery.Application do
 
   @impl true
   def start(_type, _args) do
+    IO.puts("Starting Mastery")
+
     children = [
-      # Starts a worker by calling: Mastery.Worker.start_link(arg)
-      # {Mastery.Worker, arg}
+      {Mastery.Boundary.QuizManager, [name: Mastery.Boundary.QuizManager]}
     ]
 
     # See https://hexdocs.pm/elixir/Supervisor.html
